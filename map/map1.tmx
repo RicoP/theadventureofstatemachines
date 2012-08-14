@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="16" height="16" tilewidth="32" tileheight="32">
  <properties>
   <property name="Test1" value="1"/>
  </properties>
@@ -39,19 +39,24 @@
  <tileset firstgid="669" name="youngwheat" tilewidth="32" tileheight="32">
   <image source="youngwheat.png" width="96" height="192"/>
  </tileset>
- <layer name="Background" width="64" height="64">
+ <layer name="background" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJzt00EKgzAQQNGpd+mmta21eP+TCbophFkURKyQvMUjZDefSeZLxAwAAAAAAAAAAAAAAADA39y7iP6HR3f+jEd6rn2vwpTuQ2X9ed+3BvqvRUPed1Zjf0l/e/3ev/7W+79/4L2e4wafSvr3WgAA3HzW
+   eJz7y8jA8HcUUx1rMzEw6ODBukz49esB5fWRsBkQmyLxDZjw26dFon5C9o3qp41+VShtCKSNSMDGBNIPsRgAlhucKQ==
   </data>
  </layer>
- <layer name="obstacles" width="64" height="64">
+ <layer name="obstacles" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJzt2TEKQjEQRdEQELEQVyWuQVyDixA3brpf2ryRP3gOTPvIrTMGAAAAAAAAAAAAbI5zjLnzO826/kPhdkrlG/XXbafo77mdor/ndor+ntspHfuv626hrY7993WP0Jb+0NAPt5/jv/tf696hrY79Sfp7bqfo77mdor/ndor+ntsp+uu2zzv43/h2l3UfDQgGhQ==
+   eJyTZGJgECETSwOxOBCTC1iR9LsCsRsQu5OpPxKIo4A4eoD05wJxHhDnk6m/EYibgLiZTP3kgFH9Q1+/PBAzkYn5gRgAxwcJVQ==
   </data>
  </layer>
- <layer name="objects" width="64" height="64">
+ <layer name="objects" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAACAtwFAAAAB
+   eJxjYBgcYCqVzJk2CNwwCkbBUAEAn0cBwQ==
+  </data>
+ </layer>
+ <layer name="ceiling" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjFQAAAQAAAE=
   </data>
  </layer>
 </map>

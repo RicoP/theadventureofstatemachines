@@ -1,3 +1,6 @@
 [submodule "statemachine"]
 	path = statemachine
 	url = git://github.com/RicoP/statemachine.git
+[submodule "gltoolbox.js"]
+	path = gltoolbox.js
+	url = git://github.com/RicoP/gltoolbox.js.git
