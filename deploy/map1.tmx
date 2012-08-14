@@ -46,7 +46,7 @@
  </layer>
  <layer name="obstacles" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJyTZGJgECETSwOxOBCTC1iR9LsCsRsQu5OpPxKIo4A4eoD05wJxHhDnk6m/EYibgLiZTP3kgFH9Q1+/PBAzkYn5gRgAxwcJVQ==
+   eJyTZGJgECETSwOxOBCTC8SR9LsCsRsQu5OpPxKIo4A4eoD05wJxHhDnk6m/EYibgLiZTP3YwBFG/DQh/aTaf4iRNJra9l9gJI2mtv2PGEmjqWG/PJ78qQTEykCsgkNeEYgBgVAdag==
   </data>
  </layer>
  <layer name="objects" width="16" height="16">
@@ -56,7 +56,7 @@
  </layer>
  <layer name="ceiling" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjFQAAAQAAAE=
+   eJxjYBgFgxXsZsRPUxvsZMROn8ZBUxscZySNpja4yUgaPRwAAGGoEU8=
   </data>
  </layer>
 </map>
