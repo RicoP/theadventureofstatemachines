@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="Test1" value="1"/>
+ </properties>
+ <tileset firstgid="1" name="farming &amp; fishing" tilewidth="32" tileheight="32">
+  <image source="farming_fishing.png" width="640" height="640"/>
+ </tileset>
+ <tileset firstgid="401" name="plants" tilewidth="32" tileheight="32">
+  <image source="plants.png" width="288" height="384"/>
+ </tileset>
+ <tileset firstgid="509" name="diffuse" tilewidth="32" tileheight="32">
+  <image source="diffuse.png" width="64" height="64"/>
+ </tileset>
+ <tileset firstgid="513" name="fence_alt" tilewidth="32" tileheight="32">
+  <image source="fence_alt.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="531" name="fence" tilewidth="32" tileheight="32">
+  <image source="fence.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="549" name="plowed_soil" tilewidth="32" tileheight="32">
+  <image source="plowed_soil.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="567" name="reed" tilewidth="32" tileheight="32">
+  <image source="reed.png" width="96" height="320"/>
+ </tileset>
+ <tileset firstgid="597" name="sand" tilewidth="32" tileheight="32">
+  <image source="sand.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="615" name="sandwater" tilewidth="32" tileheight="32">
+  <image source="sandwater.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="633" name="tallgrass" tilewidth="32" tileheight="32">
+  <image source="tallgrass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="651" name="wheat" tilewidth="32" tileheight="32">
+  <image source="wheat.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="669" name="youngwheat" tilewidth="32" tileheight="32">
+  <image source="youngwheat.png" width="96" height="192"/>
+ </tileset>
+ <layer name="Background" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt00EKgzAQQNGpd+mmta21eP+TCbophFkURKyQvMUjZDefSeZLxAwAAAAAAAAAAAAAAADA39y7iP6HR3f+jEd6rn2vwpTuQ2X9ed+3BvqvRUPed1Zjf0l/e/3ev/7W+79/4L2e4wafSvr3WgAA3HzW
+  </data>
+ </layer>
+ <layer name="obstacles" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt2TEKQjEQRdEQELEQVyWuQVyDixA3brpf2ryRP3gOTPvIrTMGAAAAAAAAAAAAbI5zjLnzO826/kPhdkrlG/XXbafo77mdor/ndor+ntspHfuv626hrY7993WP0Jb+0NAPt5/jv/tf696hrY79Sfp7bqfo77mdor/ndor+ntsp+uu2zzv43/h2l3UfDQgGhQ==
+  </data>
+ </layer>
+ <layer name="objects" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20MH6AAAAAAAAAAAAAAAAAAAACAtwFAAAAB
+  </data>
+ </layer>
+</map>

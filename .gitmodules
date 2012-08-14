@@ -1,0 +1,3 @@
+[submodule "statemachine"]
+	path = statemachine
+	url = git://github.com/RicoP/statemachine.git
