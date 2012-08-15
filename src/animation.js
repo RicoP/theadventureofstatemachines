@@ -16,8 +16,6 @@ function Animation(list /* [ [x1,y1 [,timeout1]], [x2,y2 [,timeout2]], [x3,y3 [,
 		this.stop(); 
 		timer = setInterval( function() { that.next(); }, interval ); 
 	}; 
-
-	this.autoplay(200); 
 }
 
 #endif 

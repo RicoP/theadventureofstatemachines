@@ -4,7 +4,8 @@
 function Sprite(options) {
 	var image = options.image; 
 	var animations = options.animations; 
-	var currentanimation = animations[options.startanimation];
+	var currentanimation;
+	var animationName; 
 	var screenoffset = [ -options.spritesize[0] / 2, -options.spritesize[1] / 2 ]; 
 	var boundingbox = options.boundingbox; // [width, height]
 	var w = boundingbox[0], h = boundingbox[1]; 
@@ -12,8 +13,13 @@ function Sprite(options) {
 	var position = options.position; //Always the center of the Sprite 
 	var size = options.spritesize; 
 
-	this.setAnimation = function(anim) {
-		currentanimation = animations[anim]; 
+	this.setAnimationByName = function(name) {
+		currentanimation = animations[name]; 
+		animationName = name; 
+	};
+
+	this.getAnimationName = function() {
+		return animationName; 
 	};
 
 	this.getFrame = function() {
@@ -44,6 +50,7 @@ function Sprite(options) {
 		return screenoffset; 
 	};
 
+	this.setAnimationByName(options.startanimation); 
 }
 
 #endif 

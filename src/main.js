@@ -154,6 +154,9 @@ function startGameLoop(map, images) {
 		position : [256,256]
 	});
 
+	var heroAnimTime = 0.2; 
+	var heroNextAnimTick = heroAnimTime; 
+
 	function gameloop(info) {
 		for(var j = 0; j !== layers.length; j++) { 
 			var layer = layers[j]; 
@@ -178,26 +181,55 @@ function startGameLoop(map, images) {
 				var size = hero.getSize(); 
 				var pos = hero.getPosition(); 
 				var offset = hero.getOffset(); 
+				var moved = false; 
 
 				if(GLT.keys.isDown(GLT.keys.codes.w)) {
 					pos[1] -= size[0] * info.time.delta; 
-					hero.setAnimation("northwalk"); 
+					hero.setAnimationByName("northwalk"); 
+					moved = true;
 				}
 
 				if(GLT.keys.isDown(GLT.keys.codes.s)) {
 					pos[1] += size[0] * info.time.delta; 
-					hero.setAnimation("southwalk"); 
+					hero.setAnimationByName("southwalk"); 
+					moved = true;
 				}
 
 				if(GLT.keys.isDown(GLT.keys.codes.a)) {
 					pos[0] -= size[1] * info.time.delta; 
-					hero.setAnimation("westwalk"); 
+					hero.setAnimationByName("westwalk"); 
+					moved = true;
 				}
 
 				if(GLT.keys.isDown(GLT.keys.codes.d)) {
 					pos[0] += size[1] * info.time.delta; 
-					hero.setAnimation("eastwalk"); 
+					hero.setAnimationByName("eastwalk"); 
+					moved = true;
 				}
+
+				if(moved) {
+					heroNextAnimTick -= info.time.delta; 
+					if(heroNextAnimTick <= 0) {
+						heroNextAnimTick += heroAnimTime; 
+						hero.getAnimation().next();
+					}
+				} 
+				else {
+					var name = hero.getAnimationName(); 
+					if(name === "northwalk") {
+						hero.setAnimationByName("northstand");
+					} else if(name === "southwalk") {
+						hero.setAnimationByName("southstand"); 
+					} else if(name === "westwalk") {
+						hero.setAnimationByName("weststand"); 
+					} else if(name === "eastwalk") {
+						hero.setAnimationByName("eaststand"); 
+					}
+
+
+
+				}
+
 
 				ctx.drawImage(
 					hero.getImage(), 

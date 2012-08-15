@@ -8617,20 +8617,24 @@ function Animation(list , timeout) {
   this.stop();
   timer = setInterval( function() { that.next(); }, interval );
  };
- this.autoplay(200);
 }
 function Sprite(options) {
  var image = options.image;
  var animations = options.animations;
- var currentanimation = animations[options.startanimation];
+ var currentanimation;
+ var animationName;
  var screenoffset = [ -options.spritesize[0] / 2, -options.spritesize[1] / 2 ];
  var boundingbox = options.boundingbox;
  var w = boundingbox[0], h = boundingbox[1];
  var radius = Math.sqrt( 0.25 * (w*w+h*h) );
  var position = options.position;
  var size = options.spritesize;
- this.setAnimation = function(anim) {
-  currentanimation = animations[anim];
+ this.setAnimationByName = function(name) {
+  currentanimation = animations[name];
+  animationName = name;
+ };
+ this.getAnimationName = function() {
+  return animationName;
  };
  this.getFrame = function() {
   return currentanimation.current();
@@ -8653,6 +8657,7 @@ function Sprite(options) {
  this.getOffset = function() {
   return screenoffset;
  };
+ this.setAnimationByName(options.startanimation);
 }
 (function() {
 "use strict";
@@ -8773,6 +8778,8 @@ function startGameLoop(map, images) {
   boundingbox : [32,48],
   position : [256,256]
  });
+ var heroAnimTime = 0.2;
+ var heroNextAnimTick = heroAnimTime;
  function gameloop(info) {
   for(var j = 0; j !== layers.length; j++) {
    var layer = layers[j];
@@ -8795,21 +8802,45 @@ function startGameLoop(map, images) {
     var size = hero.getSize();
     var pos = hero.getPosition();
     var offset = hero.getOffset();
+    var moved = false;
     if(GLT.keys.isDown(GLT.keys.codes.w)) {
      pos[1] -= size[0] * info.time.delta;
-     hero.setAnimation("northwalk");
+     hero.setAnimationByName("northwalk");
+     moved = true;
     }
     if(GLT.keys.isDown(GLT.keys.codes.s)) {
      pos[1] += size[0] * info.time.delta;
-     hero.setAnimation("southwalk");
+     hero.setAnimationByName("southwalk");
+     moved = true;
     }
     if(GLT.keys.isDown(GLT.keys.codes.a)) {
      pos[0] -= size[1] * info.time.delta;
-     hero.setAnimation("westwalk");
+     hero.setAnimationByName("westwalk");
+     moved = true;
     }
     if(GLT.keys.isDown(GLT.keys.codes.d)) {
      pos[0] += size[1] * info.time.delta;
-     hero.setAnimation("eastwalk");
+     hero.setAnimationByName("eastwalk");
+     moved = true;
+    }
+    if(moved) {
+     heroNextAnimTick -= info.time.delta;
+     if(heroNextAnimTick <= 0) {
+      heroNextAnimTick += heroAnimTime;
+      hero.getAnimation().next();
+     }
+    }
+    else {
+     var name = hero.getAnimationName();
+     if(name === "northwalk") {
+      hero.setAnimationByName("northstand");
+     } else if(name === "southwalk") {
+      hero.setAnimationByName("southstand");
+     } else if(name === "westwalk") {
+      hero.setAnimationByName("weststand");
+     } else if(name === "eastwalk") {
+      hero.setAnimationByName("eaststand");
+     }
     }
     ctx.drawImage(
      hero.getImage(),
