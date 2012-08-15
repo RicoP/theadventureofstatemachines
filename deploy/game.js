@@ -8603,21 +8603,78 @@ var requestGameFrame = (function() {
 GLT.requestGameFrame = requestGameFrame;
 }(GLT));
 GLT.version = 'v0.2';
+function Animation(list , timeout) {
+ var frame = 0;
+ var length = list.length;
+ var timer = -1;
+ this.set = function(f) { frame = f; };
+ this.current = function() { return list[frame]; };
+ this.next = function() { frame = (frame+1) % length; return this.current(); };
+ this.reset = function() { frame = 0; };
+ this.stop = function() { clearInterval(timer); };
+ this.autoplay = function(interval) {
+  var that = this;
+  this.stop();
+  timer = setInterval( function() { that.next(); }, interval );
+ };
+ this.autoplay(200);
+}
+function Sprite(options) {
+ var image = options.image;
+ var animations = options.animations;
+ var currentanimation = animations[options.startanimation];
+ var screenoffset = [ -options.spritesize[0] / 2, -options.spritesize[1] / 2 ];
+ var boundingbox = options.boundingbox;
+ var w = boundingbox[0], h = boundingbox[1];
+ var radius = Math.sqrt( 0.25 * (w*w+h*h) );
+ var position = options.position;
+ var size = options.spritesize;
+ this.setAnimation = function(anim) {
+  currentanimation = animations[anim];
+ };
+ this.getFrame = function() {
+  return currentanimation.current();
+ };
+ this.getAnimation = function() {
+  return currentanimation;
+ };
+ this.getBoundingbox = function() {
+  return coundingbox;
+ };
+ this.getImage = function() {
+  return image;
+ };
+ this.getSize = function() {
+  return size;
+ };
+ this.getPosition = function() {
+  return position;
+ };
+ this.getOffset = function() {
+  return screenoffset;
+ };
+}
 (function() {
 "use strict";
 var canvas = document.getElementsByTagName("canvas")[0];
 var ctx = canvas.getContext("2d");
+var game = {
+ hero : {
+  health : 1,
+  maxhealth : 3,
+  gold : 10,
+  maxgold : 99
+ }
+};
 function loadMap(mapname) {
  GLT.loadmanager.loadFiles({
   files : [mapname],
   finished : function(files) {
    var mapdata = files[mapname];
-   console.log(mapdata.tilewidth);
-   console.log(mapdata.tileset) ;
+   mapdata.tilesets.sort(function(a,b) { return a.firstgid - b.firstgid; });
    GLT.loadmanager.loadFiles({
-    files : mapdata.tilesets.map(function(tile) { return tile.image; }),
+    files : mapdata.tilesets.map(function(tile) { return tile.image; }).concat("mage.png"),
     finished : function(images) {
-     console.log(images);
      start(mapdata, images);
     }
    });
@@ -8639,15 +8696,13 @@ function mapIndexToTile(id, tilesets, images) {
  if(id === 0) {
   return null;
  }
- var tiles = tilesets.slice(0);
- tiles.sort(function(a,b) { return a.firstgid - b.firstgid; });
  var lastSet = null;
  var nextSet = null;
  var i = 0;
  do {
-  lastSet = tiles[i];
+  lastSet = tilesets[i];
   i++;
-  nextSet = tiles[i];
+  nextSet = tilesets[i];
  } while( nextSet && id >= nextSet.firstgid );
  var tileset = lastSet;
  var offset = id - tileset.firstgid;
@@ -8680,24 +8735,49 @@ function start(map, images) {
  }
  console.log(grids);
  map.grids = grids;
- startGameLoop(map);
+ startGameLoop(map, images);
 }
-function startGameLoop(map) {
+function startGameLoop(map, images) {
  function error(m) { throw new Error(m); }
  var width = map.width;
  var height = map.height;
  var tilewidth = map.tilewidth;
  var tileheight = map.tileheight;
- var bg = map.grids.background || error("No Layer 'background'");
+ var background = map.grids.background || error("No Layer 'background'");
  var obstacles = map.grids.obstacles || error("No Layer 'obstacles'");
  var objects = map.grids.objects || error("No Layer 'objects'");
  var ceiling = map.grids.ceiling || error("No Layer 'ceiling'");
- var layers = [bg, obstacles, objects, ceiling];
+ var layers = [background, obstacles, objects, ceiling];
+ var hero = new Sprite({
+  image : images["mage.png"],
+  animations : {
+   "northstand" : new Animation([ [0,0] ]),
+   "weststand" : new Animation([ [0,64] ]),
+   "southstand" : new Animation([ [0,128] ]),
+   "eaststand" : new Animation([ [0,192] ]),
+   "northwalk" : new Animation([
+    [1*64,0], [2*64,0], [3*64,0], [4*64,0], [5*64,0], [6*64,0], [7*64,0], [8*64,0]
+   ]),
+   "westwalk" : new Animation([
+    [1*64,64], [2*64,64], [3*64,64], [4*64,64], [5*64,64], [6*64,64], [7*64,64], [8*64,64]
+   ]),
+   "southwalk" : new Animation([
+    [1*64,128], [2*64,128], [3*64,128], [4*64,128], [5*64,128], [6*64,128], [7*64,128], [8*64,128]
+   ]),
+   "eastwalk" : new Animation([
+    [1*64,192], [2*64,192], [3*64,192], [4*64,192], [5*64,192], [6*64,192], [7*64,192], [8*64,192]
+   ])
+  },
+  startanimation : "southstand",
+  spritesize : [64,64],
+  boundingbox : [32,48],
+  position : [256,256]
+ });
  function gameloop(info) {
-  for(var x = 0; x !== map.width; x++) {
-   for(var y = 0; y !== map.height; y++) {
-    for(var j = 0; j !== layers.length; j++) {
-     var layer = layers[j];
+  for(var j = 0; j !== layers.length; j++) {
+   var layer = layers[j];
+   for(var x = 0; x !== map.width; x++) {
+    for(var y = 0; y !== map.height; y++) {
      var tile = layer[x][y];
      if(tile) {
       ctx.drawImage(
@@ -8709,6 +8789,35 @@ function startGameLoop(map) {
       );
      }
     }
+   }
+   if(layer === obstacles) {
+    var frame = hero.getFrame();
+    var size = hero.getSize();
+    var pos = hero.getPosition();
+    var offset = hero.getOffset();
+    if(GLT.keys.isDown(GLT.keys.codes.w)) {
+     pos[1] -= size[0] * info.time.delta;
+     hero.setAnimation("northwalk");
+    }
+    if(GLT.keys.isDown(GLT.keys.codes.s)) {
+     pos[1] += size[0] * info.time.delta;
+     hero.setAnimation("southwalk");
+    }
+    if(GLT.keys.isDown(GLT.keys.codes.a)) {
+     pos[0] -= size[1] * info.time.delta;
+     hero.setAnimation("westwalk");
+    }
+    if(GLT.keys.isDown(GLT.keys.codes.d)) {
+     pos[0] += size[1] * info.time.delta;
+     hero.setAnimation("eastwalk");
+    }
+    ctx.drawImage(
+     hero.getImage(),
+     frame[0], frame[1],
+     size[0], size[1],
+     offset[0] + pos[0], offset[1] + pos[1],
+     size[0], size[1]
+    );
    }
   }
   GLT.requestGameFrame(gameloop);
