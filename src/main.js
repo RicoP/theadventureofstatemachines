@@ -107,22 +107,26 @@ function start(map, images) {
 }
 
 function startGameLoop(map) {
+	function error(m) { throw new Error(m); }
+
 	var width      = map.width; 
 	var height     = map.height; 
 	var tilewidth  = map.tilewidth; 
 	var tileheight = map.tileheight; 
-	var bg         = map.grids.background; 
-	var obstacles  = map.grids.obstacles; 
-	var objects    = map.grids.objects;   
-	var ceiling    = map.grids.ceiling;   
 
-	var layer = [bg, obstacles, objects, ceiling]; 
+	var bg         = map.grids.background || error("No Layer 'background'"); 
+	var obstacles  = map.grids.obstacles  || error("No Layer 'obstacles'"); 
+	var objects    = map.grids.objects    || error("No Layer 'objects'");  
+	var ceiling    = map.grids.ceiling    || error("No Layer 'ceiling'"); 
+
+	var layers = [bg, obstacles, objects, ceiling]; 
 
 	function gameloop(info) {
 		for(var x = 0; x !== map.width; x++) {
 			for(var y = 0; y !== map.height; y++) {
-				for(var l = 0; l !== layer.length; l++) { 
-					var tile = layer[l][x][y]; 
+				for(var j = 0; j !== layers.length; j++) { 
+					var layer = layers[j]; 
+					var tile = layer[x][y]; 
 					if(tile) { 
 						ctx.drawImage(
 							tile.image, 
